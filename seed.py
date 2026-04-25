@@ -21,21 +21,21 @@ FAKE_PASSWORD_HASH = "$2b$12$abcdefghijklmnopqrstuvuuuuuuuuuuuuuuuuuuuuuuuuuuuuu
 
 def pg_connect():
     return psycopg2.connect(
-        host=os.environ["POSTGRES_HOST"],
-        port=int(os.environ.get("POSTGRES_PORT", 5432)),
-        user=os.environ["POSTGRES_USER"],
-        password=os.environ["POSTGRES_PASSWORD"],
-        dbname=os.environ["POSTGRES_DB"],
+        host=os.environ["DB_HOST"],
+        port=5432,
+        user=os.environ["DB_USER"],
+        password=os.environ["DB_PASSWORD"],
+        dbname="ms1_users",
     )
 
 
 def mysql_connect():
     return pymysql.connect(
-        host=os.environ["MYSQL_HOST"],
-        port=int(os.environ.get("MYSQL_PORT", 3306)),
-        user=os.environ["MYSQL_USER"],
-        password=os.environ["MYSQL_PASSWORD"],
-        database=os.environ["MYSQL_DB"],
+        host=os.environ["DB_HOST"],
+        port=3306,
+        user=os.environ["DB_USER"],
+        password=os.environ["DB_PASSWORD"],
+        database="ms2_books",
         autocommit=False,
     )
 
