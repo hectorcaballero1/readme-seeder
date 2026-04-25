@@ -7,7 +7,7 @@ import pymysql
 import pymongo
 from faker import Faker
 
-fake = Faker("es_PE")
+fake = Faker("es")
 
 BATCH = 500
 USERS_COUNT = 20_000
