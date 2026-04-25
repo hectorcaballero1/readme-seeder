@@ -16,7 +16,7 @@ TRANSACTIONS_COUNT = 8_000
 SOLICITUDES_COUNT = 20_000
 REVIEWS_COUNT = 8_000
 
-FAKE_PASSWORD_HASH = "$2b$12$abcdefghijklmnopqrstuvuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu"
+FAKE_PASSWORD_HASH = "$2b$12$4aEb2ESeZVfKhXdMBqREr.wp9ieYoWhhBRN9PMqEmFOgYK9gztsxK"  # bcrypt("pass123", rounds=12)
 
 
 def pg_connect():
@@ -57,6 +57,7 @@ def seed_users(conn):
     print("Insertando users...")
     cur = conn.cursor()
     total = 0
+    sample_emails = []
     for batch in batches(range(USERS_COUNT), BATCH):
         rows = []
         for _ in batch:
@@ -69,6 +70,8 @@ def seed_users(conn):
                 None,
                 rand_date(),
             ))
+        if len(sample_emails) < 5:
+            sample_emails += [r[1] for r in rows[:5 - len(sample_emails)]]
         cur.executemany(
             """
             INSERT INTO users (name, email, password_hash, zone_id, photo_url, created_at)
@@ -80,7 +83,7 @@ def seed_users(conn):
         conn.commit()
         total += len(rows)
     cur.close()
-    return total
+    return total, sample_emails
 
 
 def seed_books(conn):
@@ -232,8 +235,9 @@ def main():
     db_name = os.environ["MONGO_URL"].rstrip("/").split("/")[-1]
     mdb = mongo[db_name]
 
+    users_total, sample_emails = seed_users(pg)
     summary = {
-        "users (PostgreSQL)": seed_users(pg),
+        "users (PostgreSQL)": users_total,
         "books (MySQL)": seed_books(my),
         "transactions (MySQL)": seed_transactions(my),
         "solicitudes (MongoDB)": seed_solicitudes(mdb),
@@ -247,6 +251,10 @@ def main():
     print("\nResumen:")
     for table, count in summary.items():
         print(f"  {table}: {count}")
+
+    print("\nUsuarios de prueba (password: pass123):")
+    for email in sample_emails:
+        print(f"  {email}")
 
 
 if __name__ == "__main__":

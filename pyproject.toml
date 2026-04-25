@@ -5,6 +5,7 @@ description = "One-shot seeder for PostgreSQL, MySQL and MongoDB with fake data"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "bcrypt>=4.0.0",
     "faker>=40.15.0",
     "psycopg2-binary>=2.9.12",
     "pymongo>=4.17.0",
