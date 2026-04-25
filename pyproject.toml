@@ -1,0 +1,12 @@
+[project]
+name = "readme-seeder"
+version = "0.1.0"
+description = "One-shot seeder for PostgreSQL, MySQL and MongoDB with fake data"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "faker>=40.15.0",
+    "psycopg2-binary>=2.9.12",
+    "pymongo>=4.17.0",
+    "pymysql>=1.1.2",
+]
